@@ -51,7 +51,7 @@ class Product(models.Model):
         help_text="Введите описание продукта",
     )
     photo = models.ImageField(
-        upload_to="catalog/photo",
+        upload_to="media/photo",
         blank=True,
         null=True,
         verbose_name="Изображение",
@@ -71,19 +71,25 @@ class Product(models.Model):
         verbose_name="Стоимость продукта",
         help_text="Введите стоимость продукта",
     )
-    date_created = models.DateField(
+    created_at = models.DateField(
         blank=True,
         null=True,
         verbose_name="Дата создания (записи в БД)",
         help_text="Введите Дату создания",
     )
-    date_changed = models.DateField(
+    updated_at = models.DateField(
         blank=True,
         null=True,
         verbose_name="Дата последнего изменения (записи в БД)",
         help_text="Введите Дату последнего изменения",
     )
-
+    """   manufactured_at = models.DateField(
+        blank=True,
+        null=True,
+        verbose_name="Дата производства",
+        help_text="Введите Дату производства",
+    )
+"""
     def __str__(self):
         return self.name
 
