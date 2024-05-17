@@ -1,5 +1,7 @@
 from django.db import models
+
 # Create your models here.
+
 
 class Category(models.Model):
     """Category
@@ -57,17 +59,17 @@ class Product(models.Model):
         verbose_name="Изображение",
         help_text="Загрузите изображение",
     )
-    category = models.ForeignKey(Category,
+    category = models.ForeignKey(
+        Category,
         on_delete=models.SET_NULL,
         max_length=100,
         verbose_name="Категория продукта",
         help_text="Введите категорию продукта",
         null=True,
         blank=True,
-        related_name='products',
+        related_name="products",
     )
-    price = models.IntegerField(
-        max_length=100,
+    price = models.PositiveIntegerField(
         verbose_name="Стоимость продукта",
         help_text="Введите стоимость продукта",
     )
@@ -90,6 +92,7 @@ class Product(models.Model):
         help_text="Введите Дату производства",
     )
 """
+
     def __str__(self):
         return self.name
 
@@ -97,9 +100,6 @@ class Product(models.Model):
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
         ordering = ["name", "price"]
-
-
-
 
 
 """Свяжите продукт и категорию, используя связь между таблицами «Один ко многим».
