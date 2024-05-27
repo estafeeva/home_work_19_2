@@ -1,8 +1,10 @@
 from django.shortcuts import render
+from catalog.models import Product
 
 
 def home(request):
-    return render(request, "home.html")
+    context = {'product_list': Product.objects.all()}
+    return render(request, "home.html", context=context)
 
 
 def contacts(request):
@@ -15,3 +17,8 @@ def contacts(request):
         # а также передается информация, которую заполнил пользователь
         print(name, phone, message)
     return render(request, "contacts.html")
+
+
+def product(request, pk):
+    context = {'product': Product.objects.get(pk=pk)}
+    return render(request, "product.html", context=context)
