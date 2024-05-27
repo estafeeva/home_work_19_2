@@ -5,13 +5,15 @@ from django import template
 
 register = template.Library()
 
+
 # Создание тега
 @register.simple_tag
 def limit_text_100(text):
-    if len(text) <=100:
+    if len(text) <= 100:
         return text
     else:
         return text[:100]
+
 
 @register.filter()
 def media_filter(path):

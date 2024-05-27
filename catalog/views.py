@@ -4,7 +4,7 @@ from catalog.models import Product
 
 
 def home(request):
-    context = {'product_list': Product.objects.all()}
+    context = {"product_list": Product.objects.all()}
     return render(request, "home.html", context=context)
 
 
@@ -22,8 +22,7 @@ def contacts(request):
 
 def product(request, pk):
     try:
-        context = {'product': Product.objects.get(pk=pk)}
+        context = {"product": Product.objects.get(pk=pk)}
         return render(request, "product.html", context=context)
     except django.core.exceptions.ObjectDoesNotExist:
         return render(request, "404.html")
-
