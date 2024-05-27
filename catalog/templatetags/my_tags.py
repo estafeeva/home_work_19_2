@@ -13,3 +13,8 @@ def limit_text_100(text):
     else:
         return text[:100]
 
+@register.filter()
+def media_filter(path):
+    if path:
+        return f"/media/{path}"
+    return "#"

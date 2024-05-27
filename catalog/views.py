@@ -1,3 +1,4 @@
+import django.core.exceptions
 from django.shortcuts import render
 from catalog.models import Product
 
@@ -20,5 +21,9 @@ def contacts(request):
 
 
 def product(request, pk):
-    context = {'product': Product.objects.get(pk=pk)}
-    return render(request, "product.html", context=context)
+    try:
+        context = {'product': Product.objects.get(pk=pk)}
+        return render(request, "product.html", context=context)
+    except django.core.exceptions.ObjectDoesNotExist:
+        return render(request, "404.html")
+
