@@ -105,3 +105,59 @@ class Product(models.Model):
 """Свяжите продукт и категорию, используя связь между таблицами «Один ко многим».
 У одной категории может быть много продуктов, но у одного продукта может быть только одна категория.
 Воспользуйтесь специальным полем модели — ForeignKey()."""
+
+
+class Blog(models.Model):
+    """заголовок;
+    slug (реализовать через CharField);
+    содержимое;
+    превью (изображение);
+    дата создания;
+    признак публикации;
+    количество просмотров."""
+
+    title = models.CharField(
+        max_length=100,
+        verbose_name="Заголовок статьи",
+        help_text="Введите заголовок статьи",
+    )
+    slug = models.CharField(
+        max_length=200,
+        verbose_name="slug",
+        blank=True,
+        null=True,
+    )
+    content = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name="Содержимое статьи",
+        help_text="Введите текст статьи",
+    )
+    preview = models.ImageField(
+        upload_to="media/photo",
+        blank=True,
+        null=True,
+        verbose_name="Превью",
+        help_text="Загрузите изображение",
+    )
+    created_at = models.DateField(
+        auto_created=True,
+        blank=True,
+        null=True,
+        verbose_name="Дата создания (записи в БД)",
+        help_text="Введите Дату создания",
+    )
+    is_publication = models.BooleanField(
+        default=True,
+    )
+    views_count = models.PositiveIntegerField(
+        default=0,
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Статья"
+        verbose_name_plural = "Статьи"
+        ordering = ["title"]
