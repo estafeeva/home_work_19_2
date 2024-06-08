@@ -147,12 +147,8 @@ class Blog(models.Model):
         verbose_name="Дата создания (записи в БД)",
         help_text="Введите Дату создания",
     )
-    is_publication = models.BooleanField(
-        default=True,
-    )
-    views_count = models.PositiveIntegerField(
-        default=0,
-    )
+    is_publication = models.BooleanField(default=True, verbose_name="опубликовано")
+    views_count = models.PositiveIntegerField(default=0, verbose_name="просмотры")
 
     def __str__(self):
         return self.title

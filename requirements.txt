@@ -6,3 +6,4 @@ psycopg2-binary
 black
 pillow
 ipython
+pytils==0.4.1

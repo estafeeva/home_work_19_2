@@ -33,12 +33,10 @@
                             <td class="w-25">Является публикацией</td>
                             <td>{{ object.is_publication }}</td>
                         </tr>
-                        <tr>
-                            <td class="w-25">Количество просмотров</td>
-                            <td>{{ object.views_count }}</td>
-                        </tr>
-
                     </table>
+                </div>
+                <div class="card-footer">
+                    Просмотры: {{ object.views_count }}
                 </div>
             </div>
         </div>

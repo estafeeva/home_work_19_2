@@ -8,7 +8,7 @@ from catalog.views import (
     BlogDetailView,
     BlogCreateView,
     BlogUpdateView,
-    BlogDeleteView
+    BlogDeleteView,
 )
 
 app_name = CatalogConfig.name
