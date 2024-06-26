@@ -2,6 +2,8 @@ import django.core.exceptions
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from catalog.models import Product, Blog
+from catalog.models import Product, Blog
+from catalog.forms import ProductForm
 from django.views.generic.base import TemplateView
 from django.views.generic import (
     ListView,
@@ -53,6 +55,11 @@ class ContactsPageView(TemplateView):
 # Перевели имеющиеся контроллеры с FBV на CBV
 class ProductDetailView(DetailView):
     model = Product
+
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy('catalog:product_list')
 
 
 class BlogListView(ListView):
