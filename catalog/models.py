@@ -107,6 +107,25 @@ class Product(models.Model):
 Воспользуйтесь специальным полем модели — ForeignKey()."""
 
 
+class Version(models.Model):
+    product = models.ForeignKey(
+        Product, null=True, verbose_name="Продукт", on_delete=models.SET_NULL
+    )
+    version_number = models.PositiveIntegerField(verbose_name="Номер версии")
+    version_name = models.CharField(max_length=50, verbose_name="Название версии")
+    version_is_active = models.BooleanField(
+        default=True, verbose_name="Активная версия?"
+    )
+
+    def __str__(self):
+        # Строковое отображение объекта
+        return f"Версия {self.version_number} продукта {self.product} {'активна' if self.version_is_active else 'неактивна'}"
+
+    class Meta:
+        verbose_name = "версия"
+        verbose_name_plural = "версии"
+
+
 class Blog(models.Model):
     """заголовок;
     slug (реализовать через CharField);

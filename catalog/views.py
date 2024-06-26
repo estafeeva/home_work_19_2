@@ -2,9 +2,10 @@ import django.core.exceptions
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from catalog.models import Product, Blog
-from catalog.models import Product, Blog
-from catalog.forms import ProductForm
+from catalog.models import Product, Blog, Version
+from catalog.forms import ProductForm, VersionForm
 from django.views.generic.base import TemplateView
+from django.forms import inlineformset_factory
 from django.views.generic import (
     ListView,
     DetailView,
@@ -56,17 +57,98 @@ class ContactsPageView(TemplateView):
 class ProductDetailView(DetailView):
     model = Product
 
+
 class ProductCreateView(CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy("catalog:home")
 
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        # Формирование формсета
+        ProductFormset = inlineformset_factory(
+            Product, Version, form=VersionForm, extra=1
+        )
+        if self.request.method == "POST":
+            context_data["formset"] = ProductFormset(
+                self.request.POST, instance=self.object
+            )
+        else:
+            context_data["formset"] = ProductFormset(instance=self.object)
+        return context_data
+
     def form_valid(self, form):
+        context_data = self.get_context_data()
+        formset = context_data["formset"]
+
+        if form.is_valid() and formset.is_valid():
+            self.object = form.save()
+
+            formset.instance = self.object
+            formset.save()
+            return super().form_valid(form)
+        else:
+
+            return self.render_to_response(
+                self.get_context_data(form=form, formset=formset)
+            )
+
+    """def form_valid(self, form):
         if form.is_valid():
             new_mat = form.save()
             new_mat.save()
 
-        return super().form_valid(form)
+        return super().form_valid(form)"""
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy("catalog:home")
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        # Формирование формсета
+        ProductFormset = inlineformset_factory(
+            Product, Version, form=VersionForm, extra=1
+        )
+        if self.request.method == "POST":
+            context_data["formset"] = ProductFormset(
+                self.request.POST, instance=self.object
+            )
+        else:
+            context_data["formset"] = ProductFormset(instance=self.object)
+        return context_data
+
+    def form_valid(self, form):
+        context_data = self.get_context_data()
+        formset = context_data["formset"]
+
+        if form.is_valid() and formset.is_valid():
+            self.object = form.save()
+
+            formset.instance = self.object
+            formset.save()
+            return super().form_valid(form)
+        else:
+
+            return self.render_to_response(
+                self.get_context_data(form=form, formset=formset)
+            )
+
+    """def form_valid(self, form):
+        if form.is_valid():
+            new_mat = form.save()
+            new_mat.save()
+
+        return super().form_valid(form)"""
+
+
+class ProductDeleteView(DeleteView):
+    model = Product  # Модель
+    success_url = reverse_lazy(
+        "catalog:home"
+    )  # Адрес для перенаправления после успешного удаления
 
 
 class BlogListView(ListView):
