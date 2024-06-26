@@ -18,7 +18,7 @@
 
                 <div class="card-body">
                     <img class="col-9" src="{{ blog.preview | media_filter }}">
-                    <h1 class="card-title pricing-card-title">{{ blog.priview }}</h1>
+                    <h1 class="card-title pricing-card-title">{{ blog.preview }}</h1>
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                         <li>{% limit_text_100 blog.content %}</li>
                     <a class="p-2 btn btn-outline-primary" href="/blog_list/blog/update/{{ blog.pk }}">Обновить статью</a>
