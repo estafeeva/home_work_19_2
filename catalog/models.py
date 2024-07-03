@@ -1,5 +1,8 @@
 from django.db import models
 
+from users.models import User
+
+
 # Create your models here.
 
 
@@ -85,6 +88,9 @@ class Product(models.Model):
         verbose_name="Дата последнего изменения (записи в БД)",
         help_text="Введите Дату последнего изменения",
     )
+
+    owner = models.ForeignKey(User, verbose_name='Владелец', blank=True, null=True, on_delete=models.SET_NULL)
+
     """   manufactured_at = models.DateField(
         blank=True,
         null=True,

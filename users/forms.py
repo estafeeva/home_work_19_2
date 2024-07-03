@@ -1,5 +1,5 @@
 from users.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 class UserRegisterForm(UserCreationForm):
 
     class Meta:

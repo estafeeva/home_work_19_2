@@ -8,7 +8,8 @@ class ProductForm(ModelForm):
 
     class Meta:
         model = Product
-        fields = "__all__"
+        #fields = "__all__"
+        exclude = ('owner',)
 
     def except_words_from_text(self, field_name, error_text):
 
