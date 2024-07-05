@@ -10,10 +10,11 @@
 <div class="container">
     <div class="row text-center">
         {% for product in product_list %}
+        {% if product.is_published or perms.catalog.set_published %}
         <div class="col-3">
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
-                    <a href="product/{{ product.pk }}"><h4 class="my-0 font-weight-normal">{{ product.name }}</h4></a>
+                    <a href="product/{{ product.pk }}"><h4 class="my-0 font-weight-normal {% if not product.is_published %} bg-danger {% endif %}">{{ product.name }}</h4></a>
                 </div>
 
                 <div class="card-body">
@@ -29,11 +30,14 @@
 
                     </ul>
                     <button type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
+                    {% if perms.catalog.set_published and perms.catalog.change_category and perms.catalog.change_description or user == product.owner %}
                     <a class="p-2 btn btn-outline-primary" href="product/update/{{ product.pk }}">Обновить продукт</a>
                     <a class="p-2 btn btn-outline-primary" href="product/delete/{{ product.pk }}">Удалить продукт</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
+        {% endif %}
         {% endfor %}
     </div>
 {% endblock %}

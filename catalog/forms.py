@@ -55,6 +55,13 @@ class ProductForm(ModelForm):
 #            field.help_text = 'Раз, два, три! Ура!'  # Выводит текст подсказки, для описания вводимых данных
 
 
+class ProductModeratorForm(ModelForm):
+    """Пользователи могут создавать новые продукты"""
+
+    class Meta:
+        model = Product
+        fields = ('description', 'category', 'is_published',)
+
 class VersionForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):

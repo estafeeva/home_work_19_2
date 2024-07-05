@@ -1,10 +1,11 @@
 import django.core.exceptions
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from catalog.models import Product, Blog
 from catalog.models import Product, Blog, Version
-from catalog.forms import ProductForm, VersionForm
+from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
 from django.views.generic.base import TemplateView
 from django.forms import inlineformset_factory
 from django.views.generic import (
@@ -24,7 +25,7 @@ from pytils.translit import slugify
 # Перевели имеющиеся контроллеры с FBV на CBV
 class ProductListView(LoginRequiredMixin, ListView):
     model = Product
-
+    login_url = "/users/login/"
 
 """def contacts(request):
     if request.method == "POST":
@@ -57,12 +58,13 @@ class ContactsPageView(TemplateView):
 # Перевели имеющиеся контроллеры с FBV на CBV
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
-
+    login_url = "/users/login/"
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy("catalog:home")
+    login_url = "/users/login/"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -108,6 +110,7 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy("catalog:home")
+    login_url = "/users/login/"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -146,13 +149,29 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
 
         return super().form_valid(form)"""
 
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductForm
+        if user.has_perm("catalog.set_published") and user.has_perm("catalog.change_description") and user.has_perm("catalog.change_category"):
+            return ProductModeratorForm
+        raise PermissionDenied
+
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product  # Модель
     success_url = reverse_lazy(
         "catalog:home"
     )  # Адрес для перенаправления после успешного удаления
+    login_url = "/users/login/"
 
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductForm
+        if user.has_perm("catalog.set_published") and user.has_perm("catalog.change_description") and user.has_perm("catalog.change_category"):
+            return ProductModeratorForm
+        raise PermissionDenied
 
 class BlogListView(ListView):
     model = Blog
@@ -222,6 +241,7 @@ class BlogUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse("catalog:blog", args=[self.kwargs.get("pk")])
+
 
 
 class BlogDeleteView(DeleteView):

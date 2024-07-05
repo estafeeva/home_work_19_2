@@ -31,6 +31,3 @@ class CategoryAdmin(admin.ModelAdmin):
         "views_count",
     )
 
-@admin.register(User)
-class ProductAdmin(admin.ModelAdmin):
-    list_display = ("id", "email")

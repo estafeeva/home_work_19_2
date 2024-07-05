@@ -90,6 +90,7 @@ class Product(models.Model):
     )
 
     owner = models.ForeignKey(User, verbose_name='Владелец', blank=True, null=True, on_delete=models.SET_NULL)
+    is_published = models.BooleanField(default=False, verbose_name='Признак публикации')
 
     """   manufactured_at = models.DateField(
         blank=True,
@@ -106,6 +107,21 @@ class Product(models.Model):
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
         ordering = ["name", "price"]
+
+        permissions = [
+            (
+                'set_published',
+                'Can publish posts'
+            ),
+            (
+                'change_description',
+                'Can change description'
+            ),
+            (
+                'change_category',
+                'Can change category'
+            )
+        ]
 
 
 """Свяжите продукт и категорию, используя связь между таблицами «Один ко многим».
