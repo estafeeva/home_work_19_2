@@ -3,7 +3,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
-from catalog.models import Product, Blog
+from catalog.models import Product, Blog, Category
 from catalog.models import Product, Blog, Version
 from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
 from django.views.generic.base import TemplateView
@@ -17,6 +17,8 @@ from django.views.generic import (
 )
 from pytils.translit import slugify
 
+from catalog.services import get_categories_from_cache, get_products_from_cache
+
 """def home(request):
     context = {"product_list": Product.objects.all()}
     return render(request, "product_list.html", context=context)"""
@@ -26,6 +28,9 @@ from pytils.translit import slugify
 class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     login_url = "/users/login/"
+
+    def get_queryset(self):
+        return get_products_from_cache()
 
 """def contacts(request):
     if request.method == "POST":
@@ -172,6 +177,17 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
         if user.has_perm("catalog.set_published") and user.has_perm("catalog.change_description") and user.has_perm("catalog.change_category"):
             return ProductModeratorForm
         raise PermissionDenied
+
+class CategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+    login_url = "/users/login/"
+
+    def get_queryset(self):
+        return get_categories_from_cache()
+
+class CategoryDetailView(LoginRequiredMixin, DetailView):
+    model = Category
+    login_url = "/users/login/"
 
 class BlogListView(ListView):
     model = Blog
